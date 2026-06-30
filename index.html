@@ -32,7 +32,7 @@
     
     .bg-layer { 
       position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-      background-image: url('Kyu02.jpg?v=2'); /* 記得換成赫海背景圖 */
+      background-image: url('Kyu02.jpg?v=2'); 
       background-size: cover; background-position: center top; 
       z-index: -1; pointer-events: none; 
       box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.15); 
@@ -42,7 +42,7 @@
       position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
       overflow-y: scroll; 
       -webkit-overflow-scrolling: touch; 
-      padding: 5px 15px 110px 15px; 
+      padding: 5px 15px 120px 15px; 
       box-sizing: border-box; 
     }
     
@@ -76,35 +76,40 @@
     .total-stat-box .stat-title { font-size: 9px; font-weight: 700; color: #666; margin-bottom: 2px; }
     .total-stat-box .stat-num { font-size: 11px; font-weight: 800; color: var(--kyu-dark); letter-spacing: 0.5px;}
 
-    .segmented-control {
+    .notice-board { padding: 8px 10px; background: rgba(255, 255, 255, 0.6); border-radius: 12px; font-size: 11px; color: var(--kyu-dark); font-weight: 600; border: 1px dashed rgba(13, 27, 42, 0.4); text-align: left; line-height: 1.4; margin: 0; box-sizing: border-box; word-break: break-word; display: none; align-items: center; }
+
+    /* 全新設計的微型膠囊篩選器 */
+    .filter-wrapper {
       display: flex;
-      background: rgba(13, 27, 42, 0.1);
-      border-radius: 12px;
-      padding: 3px;
+      justify-content: center;
       width: 100%;
+    }
+    .segmented-control {
+      display: inline-flex;
+      background: rgba(13, 27, 42, 0.08); /* 背景調淡一點，更優雅 */
+      border-radius: 20px; /* 完美的膠囊圓角 */
+      padding: 4px;
       box-sizing: border-box;
-      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+      box-shadow: inset 0 1px 4px rgba(0,0,0,0.1);
     }
     .seg-btn {
-      flex: 1;
-      padding: 8px 0;
+      padding: 6px 14px; /* 縮小上下高度，保留左右寬度 */
       background: transparent;
       border: none;
-      border-radius: 9px;
-      font-size: 13px;
+      border-radius: 16px;
+      font-size: 11px; /* 字體微縮，提升精緻感 */
       font-weight: 700;
-      color: #444;
+      color: #555;
       cursor: pointer;
       transition: all 0.25s ease;
       text-align: center;
+      letter-spacing: 0.5px;
     }
     .seg-btn.active {
       background: #ffffff;
       color: var(--kyu-dark);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
-
-    .notice-board { padding: 8px 10px; background: rgba(255, 255, 255, 0.6); border-radius: 12px; font-size: 11px; color: var(--kyu-dark); font-weight: 600; border: 1px dashed rgba(13, 27, 42, 0.4); text-align: left; line-height: 1.4; margin: 0; box-sizing: border-box; word-break: break-word; display: none; align-items: center; }
 
     .app-container { width: 100%; max-width: 800px; margin: 0 auto; background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 25px; border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 8px 32px rgba(0,0,0,0.25); padding: 12px 10px; box-sizing: border-box; }
     
@@ -237,14 +242,16 @@
         </div>
       </div>
       
-      <div class="segmented-control">
-        <button class="seg-btn active" id="who-all" onclick="setWhoFilter('all')">ALL</button>
-        <button class="seg-btn" id="who-donghae" onclick="setWhoFilter('東海')">東海</button>
-        <button class="seg-btn" id="who-eunhyuk" onclick="setWhoFilter('銀赫')">銀赫</button>
-        <button class="seg-btn" id="who-couple" onclick="setWhoFilter('雙人')">雙人</button>
-      </div>
-      
       <div id="noticeBoard" class="notice-board"></div>
+      
+      <div class="filter-wrapper">
+        <div class="segmented-control">
+          <button class="seg-btn active" id="who-all" onclick="setWhoFilter('all')">ALL</button>
+          <button class="seg-btn" id="who-donghae" onclick="setWhoFilter('東海')">東海</button>
+          <button class="seg-btn" id="who-eunhyuk" onclick="setWhoFilter('銀赫')">銀赫</button>
+          <button class="seg-btn" id="who-couple" onclick="setWhoFilter('雙人')">雙人</button>
+        </div>
+      </div>
     </header>
 
     <div class="app-container">
@@ -267,7 +274,6 @@
   <div class="bottom-bar">
     <div class="triple-stat-container">
       
-      <!-- 海 -->
       <div class="char-group">
         <div class="char-title">海</div>
         <div class="char-stats">
@@ -284,7 +290,6 @@
         </div>
       </div>
       
-      <!-- 赫 -->
       <div class="char-group">
         <div class="char-title">赫</div>
         <div class="char-stats">
@@ -301,7 +306,6 @@
         </div>
       </div>
       
-      <!-- 雙人 -->
       <div class="char-group">
         <div class="char-title">雙<br>人</div>
         <div class="char-stats">
@@ -352,7 +356,6 @@
         document.getElementById('displayArea').innerHTML = '';
         renderWishlist();
       } else {
-        // 重整整個頁籤，這樣就會觸發過濾掉沒有資料的 E 欄按鈕
         switchTab(currentTab);
       }
     }
@@ -504,7 +507,6 @@
       subNavContainer.style.display = 'block'; 
       let releases = Object.keys(allData[tabId] || {});
       
-      // 新增：如果當前有選擇特定人物，過濾掉完全沒有該人物資料的 E 欄 (子頁籤)
       if (currentWhoFilter !== 'all') {
         releases = releases.filter(rel => {
           const releaseData = allData[tabId][rel];
