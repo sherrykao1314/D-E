@@ -23,7 +23,8 @@
     :root { 
       --kyu-muted: #778da9;      
       --kyu-dark: #0d1b2a;       
-      --glass: rgba(255, 255, 255, 0.35); 
+      /* 毛玻璃改成淡淡的藍色 */
+      --glass: rgba(230, 240, 255, 0.45); 
       --kyu-heart: #0055A4;      
       --kyu-light: #e0e1dd;      
     }
@@ -51,7 +52,8 @@
       margin: 0 auto 12px auto; 
       background: var(--glass); padding: 12px 16px; 
       border-radius: 18px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); 
-      border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 8px 32px rgba(0,0,0,0.25); 
+      /* 邊框與陰影配合藍色毛玻璃調整 */
+      border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 8px 32px rgba(0, 40, 80, 0.15); 
       box-sizing: border-box; 
       display: flex; flex-direction: column; gap: 12px;
     }
@@ -86,18 +88,18 @@
     }
     .segmented-control {
       display: inline-flex;
-      background: rgba(13, 27, 42, 0.08); /* 背景調淡一點，更優雅 */
-      border-radius: 20px; /* 完美的膠囊圓角 */
+      background: rgba(13, 27, 42, 0.08); 
+      border-radius: 20px; 
       padding: 4px;
       box-sizing: border-box;
       box-shadow: inset 0 1px 4px rgba(0,0,0,0.1);
     }
     .seg-btn {
-      padding: 6px 14px; /* 縮小上下高度，保留左右寬度 */
+      padding: 6px 14px; 
       background: transparent;
       border: none;
       border-radius: 16px;
-      font-size: 11px; /* 字體微縮，提升精緻感 */
+      font-size: 11px; 
       font-weight: 700;
       color: #555;
       cursor: pointer;
@@ -111,7 +113,8 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
-    .app-container { width: 100%; max-width: 800px; margin: 0 auto; background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 25px; border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 8px 32px rgba(0,0,0,0.25); padding: 12px 10px; box-sizing: border-box; }
+    /* 容器也換上藍色毛玻璃與陰影 */
+    .app-container { width: 100%; max-width: 800px; margin: 0 auto; background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 25px; border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 8px 32px rgba(0, 40, 80, 0.15); padding: 12px 10px; box-sizing: border-box; }
     
     .tab-nav { display: flex; flex-wrap: nowrap; justify-content: flex-start; gap: 6px; background: rgba(255,255,255,0.25); border-radius: 15px; padding: 6px; margin-bottom: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
     .tab-nav::-webkit-scrollbar { display: none; }
@@ -150,9 +153,20 @@
     .wish-view .card-source { display: block; }
 
     .no-img-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(13, 27, 42, 0.05); color: var(--kyu-dark); font-size: 0.85em; font-weight: 600; text-align: center; padding: 10px; box-sizing: border-box; border: 1px dashed rgba(13, 27, 42, 0.2); line-height: 1.5; gap: 4px; }
-    .empty-msg { text-align: center; color: #1a1a1a; padding: 40px; font-style: italic; font-weight: 600; }
     
-    .bottom-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-top: 1px solid rgba(255,255,255,0.8); padding: 8px 12px; box-sizing: border-box; box-shadow: 0 -4px 20px rgba(0,0,0,0.12); z-index: 999; padding-bottom: calc(8px + env(safe-area-inset-bottom)); pointer-events: none; }
+    /* 調整空清單的文字大小與顏色 */
+    .empty-msg { 
+      text-align: center; 
+      color: #666; 
+      padding: 30px 20px; 
+      font-style: italic; 
+      font-weight: 600; 
+      font-size: 13px; /* 字體改小 */
+      line-height: 1.6;
+    }
+    
+    /* 底部進度條也換上淡淡的冰藍底色 */
+    .bottom-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(230, 240, 255, 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-top: 1px solid rgba(255,255,255,0.8); padding: 8px 12px; box-sizing: border-box; box-shadow: 0 -4px 20px rgba(0,0,0,0.12); z-index: 999; padding-bottom: calc(8px + env(safe-area-inset-bottom)); pointer-events: none; }
     
     .triple-stat-container {
       display: flex;
