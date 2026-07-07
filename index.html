@@ -7,7 +7,7 @@
   <link rel="apple-touch-icon" href="Kyu01.jpg?v=2">
   <link rel="icon" sizes="192x192" href="Kyu01.jpg?v=2">
   
-  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-native-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   
@@ -160,32 +160,70 @@
       line-height: 1.6;
     }
 
-    /* 針對「想要」與「擁有」頁籤設定每行五張 (5欄) 的微型緊湊排版 */
-    .wish-view .grid, .owned-view .grid { 
+    /* 針對「想要」頁籤設定每行四張 (4欄) 的排版 */
+    .wish-view .grid { 
+      grid-template-columns: repeat(4, 1fr); 
+      gap: 8px; 
+    }
+    .wish-view .card { 
+      padding: 6px; 
+      border-radius: 10px; 
+      box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+    }
+    .wish-view .card-name { 
+      font-size: 10px; 
+      margin-top: 6px; 
+    }
+    .wish-view .card-source { 
+      font-size: 8.5px; 
+      margin-top: 3px; 
+    }
+    .wish-view .wish-btn { 
+      width: 18px; 
+      height: 18px; 
+      font-size: 11px; 
+      top: 3px; 
+      right: 3px; 
+    }
+    .wish-view .card.owned::after { 
+      width: 18px; 
+      height: 18px; 
+      line-height: 18px; 
+      font-size: 11px; 
+      bottom: -3px; 
+      right: -3px; 
+    }
+    .wish-view .no-img-placeholder {
+      font-size: 8px;
+      padding: 4px;
+    }
+
+    /* 針對「擁有」頁籤設定每行五張 (5欄) 的微型緊湊排版 */
+    .owned-view .grid { 
       grid-template-columns: repeat(5, 1fr); 
       gap: 6px; 
     }
-    .wish-view .card, .owned-view .card { 
+    .owned-view .card { 
       padding: 4px; 
       border-radius: 8px; 
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    .wish-view .card-name, .owned-view .card-name { 
+    .owned-view .card-name { 
       font-size: 9px; 
       margin-top: 4px; 
     }
-    .wish-view .card-source, .owned-view .card-source { 
+    .owned-view .card-source { 
       font-size: 8px; 
       margin-top: 2px; 
     }
-    .wish-view .wish-btn, .owned-view .wish-btn { 
+    .owned-view .wish-btn { 
       width: 16px; 
       height: 16px; 
       font-size: 9px; 
       top: 2px; 
       right: 2px; 
     }
-    .wish-view .card.owned::after, .owned-view .card.owned::after { 
+    .owned-view .card.owned::after { 
       width: 16px; 
       height: 16px; 
       line-height: 16px; 
@@ -193,7 +231,7 @@
       bottom: -3px; 
       right: -3px; 
     }
-    .wish-view .no-img-placeholder, .owned-view .no-img-placeholder {
+    .owned-view .no-img-placeholder {
       font-size: 7px;
       padding: 2px;
     }
@@ -627,7 +665,7 @@
     function renderOwnedlist() {
       const area = document.getElementById('displayArea');
       if (myCollection.length === 0) {
-        area.innerHTML = '<div class="empty-msg">目前沒有已擁有的卡片喔，趕快去各分頁點擊收藏吧！</div>';
+        area.innerHTML = '<div class="empty-msg">目前沒有已擁擁有的卡片喔，趕快去各分頁點擊收藏吧！</div>';
         return;
       }
       
