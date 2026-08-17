@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   
-  <link rel="apple-touch-icon" href="Kyu01.jpg?v=2">
-  <link rel="icon" sizes="192x192" href="Kyu01.jpg?v=2">
+  <link rel="apple-touch-icon" href="Kyu01.jpg?v=3">
+  <link rel="icon" sizes="192x192" href="Kyu01.jpg?v=3">
   
   <meta http-native-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
@@ -32,7 +32,7 @@
     
     .bg-layer { 
       position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-      background-image: url('Kyu02.jpg?v=2'); 
+      background-image: url('Kyu02.jpg?v=3'); 
       background-size: cover; background-position: center top; 
       z-index: -1; pointer-events: none; 
       box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.15); 
@@ -72,7 +72,6 @@
       background: rgba(240, 245, 255, 0.5);
       transition: all 0.3s;
     }
-    /* 當輸入框被停用 (自動登入狀態) 時的樣式 */
     .login-input:disabled {
       background-color: #e8f5e9;
       border-color: #81c784;
@@ -140,37 +139,10 @@
 
     .notice-board { padding: 8px 10px; background: rgba(255, 255, 255, 0.6); border-radius: 12px; font-size: 11px; color: var(--kyu-dark); font-weight: 600; border: 1px dashed rgba(13, 27, 42, 0.4); text-align: left; line-height: 1.4; margin: 0; box-sizing: border-box; word-break: break-word; display: none; align-items: center; }
 
-    .filter-wrapper {
-      display: flex;
-      justify-content: center;
-      width: 100%;
-    }
-    .segmented-control {
-      display: inline-flex;
-      background: rgba(13, 27, 42, 0.08); 
-      border-radius: 20px; 
-      padding: 4px;
-      box-sizing: border-box;
-      box-shadow: inset 0 1px 4px rgba(0,0,0,0.1);
-    }
-    .seg-btn {
-      padding: 6px 14px; 
-      background: transparent;
-      border: none;
-      border-radius: 16px;
-      font-size: 11px; 
-      font-weight: 700;
-      color: #555;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      text-align: center;
-      letter-spacing: 0.5px;
-    }
-    .seg-btn.active {
-      background: #ffffff;
-      color: var(--kyu-dark);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
+    .filter-wrapper { display: flex; justify-content: center; width: 100%; }
+    .segmented-control { display: inline-flex; background: rgba(13, 27, 42, 0.08); border-radius: 20px; padding: 4px; box-sizing: border-box; box-shadow: inset 0 1px 4px rgba(0,0,0,0.1); }
+    .seg-btn { padding: 6px 14px; background: transparent; border: none; border-radius: 16px; font-size: 11px; font-weight: 700; color: #555; cursor: pointer; transition: all 0.25s ease; text-align: center; letter-spacing: 0.5px; }
+    .seg-btn.active { background: #ffffff; color: var(--kyu-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
 
     .app-container { width: 100%; max-width: 800px; margin: 0 auto; background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 25px; border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 8px 32px rgba(0, 40, 80, 0.15); padding: 12px 10px; box-sizing: border-box; }
     
@@ -190,7 +162,6 @@
     .wish-view .section-title, .owned-view .section-title { margin-top: 5px; }
 
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 12px; margin-bottom: 20px; align-items: start; }
-    
     .card { background: rgba(255,255,255,0.85); border-radius: 12px; padding: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); cursor: pointer; position: relative; -webkit-tap-highlight-color: transparent; transition: 0.3s; }
     
     .card.who-dh { background: #e8f4fc; } 
@@ -219,15 +190,7 @@
 
     .no-img-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(13, 27, 42, 0.05); color: var(--kyu-dark); font-size: 0.85em; font-weight: 600; text-align: center; padding: 10px; box-sizing: border-box; border: 1px dashed rgba(13, 27, 42, 0.2); line-height: 1.5; gap: 4px; }
     
-    .empty-msg { 
-      text-align: center; 
-      color: #666; 
-      padding: 30px 20px; 
-      font-style: italic; 
-      font-weight: 600; 
-      font-size: 13px; 
-      line-height: 1.6;
-    }
+    .empty-msg { text-align: center; color: #666; padding: 30px 20px; font-style: italic; font-weight: 600; font-size: 13px; line-height: 1.6; }
 
     .wish-view .grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
     .wish-view .card { padding: 6px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.12); }
@@ -249,13 +212,7 @@
     
     .triple-stat-container { display: flex; justify-content: space-between; gap: 6px; width: 100%; max-width: 800px; margin: 0 auto; }
     
-    .char-group {
-      flex: 1; background: rgba(255,255,255,0.6);
-      border: 1px solid rgba(255,255,255,0.9); border-radius: 8px;
-      padding: 6px; display: flex; flex-direction: row; align-items: center; gap: 6px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
-    
+    .char-group { flex: 1; background: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.9); border-radius: 8px; padding: 6px; display: flex; flex-direction: row; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
     .char-title { font-size: 11px; font-weight: 800; color: var(--kyu-dark); text-align: center; line-height: 1.1; white-space: pre-wrap; }
     .char-stats { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
     .stat-row-mini { display: flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 700; color: #444; }
@@ -269,17 +226,11 @@
     .fill-album { background: #0055A4; } 
     .fill-card { background: #FF2A2A; }  
     
-    .loader {
-      border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid var(--kyu-dark);
-      border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite;
-      margin: 10px auto; display: none;
-    }
+    .loader { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid var(--kyu-dark); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 10px auto; display: none; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
   </style>
 </head>
 <body>
-
   <div class="bg-layer" id="bgLayer"></div>
 
   <!-- 登入畫面 -->
@@ -305,15 +256,12 @@
             <h1 class="main-title"><span class="kyu-txt">D&E</span><span class="album-txt">Album & Card</span></h1>
             <div class="sub-credits">Threads @sherrykao1314</div>
           </div>
-          
           <div class="total-stat-box">
             <span class="stat-title">圖鑑總收錄</span>
             <span class="stat-num" id="totalCountText">載入中...</span>
           </div>
         </div>
-        
         <div id="noticeBoard" class="notice-board"></div>
-        
         <div class="filter-wrapper">
           <div class="segmented-control">
             <button class="seg-btn active" id="who-all" onclick="setWhoFilter('all')">ALL</button>
@@ -371,9 +319,6 @@
   </div>
 
   <script>
-    // ==========================================
-    // ⚠️ 記得把下面的網址換成你最新發佈的 GAS URL！
-    // ==========================================
     const GAS_API_URL = "https://script.google.com/macros/s/AKfycby1K90k8xPausYiQSesrLYWw3Ozm2WPywTR0nshdji6XuTAInGRznZXGtP4lxLkfbHi/exec"; 
 
     const TOKEN_KEY = 'dne_auth_token';
@@ -393,10 +338,8 @@
     let currentRelease = null; 
     let syncTimeout = null;
 
-    // 啟動時檢查憑證
     window.onload = function() {
       if (userToken) {
-        // UI 轉為「已綁定、自動登入」模式
         document.getElementById('bindBadge').style.display = 'block';
         document.getElementById('usernameInput').value = currentUsername || "已儲存的帳號";
         document.getElementById('passwordInput').value = "********";
@@ -415,21 +358,20 @@
       }
     };
 
-    // 極速自動登入：一次拉取所有資料
     function executeInitLoad(token) {
-      fetch(`${GAS_API_URL}?action=initLoad&token=${token}`)
+      // 加入強制破解快取參數
+      fetch(`${GAS_API_URL}?action=initLoad&token=${encodeURIComponent(token)}&t=${new Date().getTime()}`)
         .then(res => res.json())
         .then(res => {
           if (res.success) {
             handleLoginSuccess(res);
           } else {
-            resetLoginUI("憑證失效，請重新登入");
+            resetLoginUI(res.message || "憑證失效，請重新登入");
           }
         })
         .catch(e => resetLoginUI("網路不穩，請重新整理"));
     }
 
-    // 手動登入
     function attemptLogin() {
       const u = document.getElementById('usernameInput').value.trim();
       const p = document.getElementById('passwordInput').value.trim();
@@ -443,7 +385,8 @@
       document.getElementById('loginLoader').style.display = "block";
       document.querySelector('.login-btn').style.display = "none";
 
-      fetch(`${GAS_API_URL}?action=loginComplete&username=${u}&password=${p}`)
+      // 加入編碼保護與破解快取參數
+      fetch(`${GAS_API_URL}?action=loginComplete&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}&t=${new Date().getTime()}`)
         .then(res => res.json())
         .then(res => {
           if (res.success) {
@@ -455,7 +398,6 @@
         .catch(e => resetLoginUI("網路錯誤，請稍後再試"));
     }
 
-    // 登入成功後的共用處理
     function handleLoginSuccess(res) {
       if (res.token) {
         userToken = res.token;
@@ -474,20 +416,17 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(myCollection));
       localStorage.setItem(WISH_KEY, JSON.stringify(myWishlist));
       
-      // 顯示公告
       if (res.noticeMessage && res.noticeMessage.toString().trim() !== "") {
         const noticeEl = document.getElementById('noticeBoard');
         noticeEl.innerHTML = `📢 ${res.noticeMessage.toString().replace(/\n/g, '<br>')}`;
         noticeEl.style.display = 'flex';
       }
 
-      // 切換畫面與處理卡片
       document.getElementById('loginScreen').style.display = 'none';
       document.getElementById('mainApp').style.display = 'block';
       processData(res.cards);
     }
 
-    // 重設登入UI (若發生錯誤或失效)
     function resetLoginUI(msg) {
       localStorage.removeItem(TOKEN_KEY);
       userToken = null;
@@ -508,7 +447,6 @@
       msgEl.style.color = "#e63946";
     }
 
-    // 將資料同步回 Google 試算表 (延遲寫入避免狂點當機)
     function syncDataToCloud() {
       if(syncTimeout) clearTimeout(syncTimeout);
       syncTimeout = setTimeout(() => {
@@ -524,10 +462,6 @@
       }, 1500); 
     }
 
-
-    // ----------------------------------------------------
-    // 下面是卡片渲染、篩選等主程式邏輯
-    // ----------------------------------------------------
     function processData(cards) {
       allData = { solo: {}, dne: {}, group: {}, other_album: {}, concert: {}, merch: {}, calendar: {}, magazine: {}, endorsement: {} };
       cardLookup = {};
@@ -593,7 +527,6 @@
 
     function setWhoFilter(who) {
       currentWhoFilter = who;
-      
       document.querySelectorAll('.segmented-control .seg-btn').forEach(btn => btn.classList.remove('active'));
       if(who === 'all') document.getElementById('who-all').classList.add('active');
       if(who === '東海') document.getElementById('who-donghae').classList.add('active');
@@ -620,9 +553,7 @@
         let isAlbum = itemDictionary[id] === '專輯';
         let isOwned = myCollection.includes(id);
         let item = cardLookup[id];
-        
         if (!item) return;
-
         if (isAlbum) overallAlbums++; else overallCards++;
         
         let targetGrp = null;
@@ -642,7 +573,6 @@
       });
 
       document.getElementById('totalCountText').innerHTML = `${overallAlbums}專 / ${overallCards}卡`;
-
       const renderBar = (grp, type) => {
         let tot = totals[grp][type];
         let own = owneds[grp][type];
@@ -651,7 +581,6 @@
         document.getElementById(`${grp}${NameKey}Text`).innerText = `${own}/${tot}`;
         document.getElementById(`${grp}${NameKey}Fill`).style.width = `${pct}%`;
       };
-
       renderBar('dh', 'alb'); renderBar('dh', 'crd');
       renderBar('eh', 'alb'); renderBar('eh', 'crd');
       renderBar('de', 'alb'); renderBar('de', 'crd');
@@ -679,7 +608,6 @@
         renderWishlist();
         return;
       }
-
       if (tabId === 'owned_tab') {
         area.classList.add('owned-view');
         subNavContainer.style.display = 'none'; 
@@ -689,18 +617,12 @@
 
       subNavContainer.style.display = 'block'; 
       let releases = Object.keys(allData[tabId] || {});
-      
       if (currentWhoFilter !== 'all') {
         releases = releases.filter(rel => {
           const releaseData = allData[tabId][rel];
           return Object.keys(releaseData).some(header => {
             const data = releaseData[header];
-            const allItems = [
-              ...data.uncategorized, ...data.albums, ...data.photocards,
-              ...data.specialCards, ...data.fansignCards, ...data.wonFansignCards,
-              ...data.luckyCards, ...data.entryCards, ...data.randomCards,
-              ...data.bonusCards, ...data.otherCards
-            ];
+            const allItems = [ ...data.uncategorized, ...data.albums, ...data.photocards, ...data.specialCards, ...data.fansignCards, ...data.wonFansignCards, ...data.luckyCards, ...data.entryCards, ...data.randomCards, ...data.bonusCards, ...data.otherCards ];
             return allItems.some(item => item.who === currentWhoFilter);
           });
         });
@@ -716,9 +638,7 @@
       }
       
       let activeRelease = releases[0];
-      if (currentRelease && releases.includes(currentRelease)) {
-        activeRelease = currentRelease;
-      }
+      if (currentRelease && releases.includes(currentRelease)) activeRelease = currentRelease;
 
       releases.forEach((rel, idx) => {
         const btn = document.createElement('button');
@@ -727,7 +647,6 @@
         btn.onclick = (e) => switchRelease(rel, e, tabId);
         subNav.appendChild(btn);
       });
-      
       switchRelease(activeRelease, null, tabId);
     }
 
@@ -787,10 +706,8 @@
       if(!releaseData) return;
       
       let hasAnyContentInRelease = false;
-      
       Object.keys(releaseData).forEach(header => {
         const data = releaseData[header];
-        
         const filterList = (list) => {
           if (!list) return [];
           if (currentWhoFilter === 'all') return list;
@@ -812,7 +729,6 @@
         const totalItemsInHeader = f_uncat.length + f_album.length + f_photo.length + f_spec.length + f_fsign.length + f_won.length + f_lucky.length + f_entry.length + f_rand.length + f_bonus.length + f_other.length;
 
         if (totalItemsInHeader === 0) return;
-
         hasAnyContentInRelease = true;
 
         if (header !== "") {
@@ -831,17 +747,7 @@
           }
         };
         
-        renderGrid(null, f_uncat);
-        renderGrid("💿 專輯版本", f_album);
-        renderGrid("🃏 專輯小卡", f_photo);
-        renderGrid("🎁 特典小卡", f_spec);
-        renderGrid("✍️ 簽售小卡", f_fsign);
-        renderGrid("🎉 中簽卡", f_won);
-        renderGrid("🍀 幸運卡", f_lucky);
-        renderGrid("🎟️ 入場卡", f_entry); 
-        renderGrid("🎲 隨機卡", f_rand);
-        renderGrid("🛍️ 滿額卡", f_bonus);
-        renderGrid("📌 其他小卡", f_other);
+        renderGrid(null, f_uncat); renderGrid("💿 專輯版本", f_album); renderGrid("🃏 專輯小卡", f_photo); renderGrid("🎁 特典小卡", f_spec); renderGrid("✍️ 簽售小卡", f_fsign); renderGrid("🎉 中簽卡", f_won); renderGrid("🍀 幸運卡", f_lucky); renderGrid("🎟️ 入場卡", f_entry); renderGrid("🎲 隨機卡", f_rand); renderGrid("🛍️ 滿額卡", f_bonus); renderGrid("📌 其他小卡", f_other);
       });
 
       if (!hasAnyContentInRelease) {
