@@ -38,6 +38,39 @@
       box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.15); 
     }
     
+    /* 登入畫面樣式 */
+    #loginScreen {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(13, 27, 42, 0.85); backdrop-filter: blur(10px);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 9999;
+    }
+    .login-box {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px 20px; border-radius: 20px;
+      width: 85%; max-width: 350px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+    .login-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--kyu-dark); margin-bottom: 20px; font-weight: 700;}
+    .login-input {
+      width: 100%; padding: 12px; margin-bottom: 15px;
+      border: 1px solid #ddd; border-radius: 10px;
+      font-size: 1rem; box-sizing: border-box;
+      background: rgba(240, 245, 255, 0.5);
+    }
+    .login-btn {
+      width: 100%; padding: 12px;
+      background: var(--kyu-dark); color: white;
+      border: none; border-radius: 10px;
+      font-size: 1.1rem; font-weight: bold; cursor: pointer;
+      transition: 0.3s;
+    }
+    .login-btn:active { transform: scale(0.98); }
+    #loginMsg { color: #e63946; font-size: 0.9rem; margin-top: 10px; min-height: 20px;}
+
+    #mainApp { display: none; height: 100%; width: 100%; }
+
     .scroll-wrapper { 
       position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
       overflow-y: scroll; 
@@ -62,6 +95,13 @@
     .kyu-txt { font-size: 2.2rem; font-style: italic; font-weight: 700; letter-spacing: 0.5px; line-height: 1; }
     .album-txt { font-family: 'Montserrat', sans-serif; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; opacity: 0.95; line-height: 1; }
     .sub-credits { font-size: 0.75rem; color: #fff0f2; font-family: 'Montserrat', sans-serif; opacity: 0.9; font-weight: 500; text-shadow: 0 1px 3px rgba(0,0,0,0.4); letter-spacing: 0.5px; }
+
+    .user-badge {
+      background: rgba(13, 27, 42, 0.8); color: white;
+      padding: 4px 10px; border-radius: 12px; font-size: 0.75rem;
+      font-weight: bold; margin-bottom: 5px; align-self: flex-start;
+      display: inline-block;
+    }
 
     .total-stat-box {
       background: rgba(255,255,255,0.7);
@@ -315,6 +355,14 @@
 
     .fill-album { background: #0055A4; } 
     .fill-card { background: #FF2A2A; }  
+    
+    /* 載入中動畫 */
+    .loader {
+      border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid var(--kyu-dark);
+      border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite;
+      margin: 10px auto; display: none;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
   </style>
 </head>
@@ -322,212 +370,254 @@
 
   <div class="bg-layer" id="bgLayer"></div>
 
-  <div class="scroll-wrapper">
-    <header>
-      <div class="header-top">
-        <div class="title-group">
-          <h1 class="main-title"><span class="kyu-txt">D&E</span><span class="album-txt">Album & Card</span></h1>
-          <div class="sub-credits">Threads @sherrykao1314</div>
-        </div>
-        
-        <div class="total-stat-box">
-          <span class="stat-title">圖鑑總收錄</span>
-          <span class="stat-num" id="totalCountText">載入中...</span>
-        </div>
-      </div>
-      
-      <div id="noticeBoard" class="notice-board"></div>
-      
-      <div class="filter-wrapper">
-        <div class="segmented-control">
-          <button class="seg-btn active" id="who-all" onclick="setWhoFilter('all')">ALL</button>
-          <button class="seg-btn" id="who-donghae" onclick="setWhoFilter('東海')">東海</button>
-          <button class="seg-btn" id="who-eunhyuk" onclick="setWhoFilter('銀赫')">銀赫</button>
-          <button class="seg-btn" id="who-couple" onclick="setWhoFilter('雙人')">雙人</button>
-        </div>
-      </div>
-    </header>
-
-    <div class="app-container">
-      <nav class="tab-nav">
-        <button class="tab-btn active" onclick="switchTab('wish', event)">❤ 想要</button>
-        <button class="tab-btn" onclick="switchTab('owned_tab', event)">✔ 擁有</button>
-        <button class="tab-btn" onclick="switchTab('solo', event)">Solo</button>
-        <button class="tab-btn" onclick="switchTab('dne', event)">D&E</button>
-        <button class="tab-btn" onclick="switchTab('group', event)">大隊專</button>
-        <button class="tab-btn" onclick="switchTab('other_album', event)">其他專</button>
-        <button class="tab-btn" onclick="switchTab('concert', event)">演唱會/FM/音樂活動</button> 
-        <button class="tab-btn" onclick="switchTab('endorsement', event)">代言/聯名</button>
-        <button class="tab-btn" onclick="switchTab('merch', event)">其他/周邊</button>
-        <button class="tab-btn" onclick="switchTab('calendar', event)">年曆</button>
-        <button class="tab-btn" onclick="switchTab('magazine', event)">雜誌</button>
-      </nav>
-      <div class="sub-nav-container" id="subNavContainer"><nav class="sub-nav" id="subNav"></nav></div>
-      <div class="content-area" id="displayArea"><div class="empty-msg">與 Google 連線中...</div></div>
+  <!-- 登入畫面 -->
+  <div id="loginScreen">
+    <div class="login-box">
+      <div class="login-title">D&E Collection</div>
+      <input type="text" id="usernameInput" class="login-input" placeholder="帳號">
+      <input type="password" id="passwordInput" class="login-input" placeholder="密碼">
+      <button class="login-btn" onclick="attemptLogin()">登入</button>
+      <div class="loader" id="loginLoader"></div>
+      <div id="loginMsg">系統驗證中...</div>
     </div>
   </div>
 
-  <div class="bottom-bar">
-    <div class="triple-stat-container">
-      
-      <div class="char-group">
-        <div class="char-title">海</div>
-        <div class="char-stats">
-          <div class="stat-row-mini">
-            <span class="emoji-icon">💿</span>
-            <div class="bar-bg"><div class="bar-fill fill-album" id="dhAlbumFill" style="width:0%"></div></div>
-            <span class="fraction" id="dhAlbumText">0/0</span>
+  <!-- 主程式區塊 -->
+  <div id="mainApp">
+    <div class="scroll-wrapper">
+      <header>
+        <div class="header-top">
+          <div class="title-group">
+            <span class="user-badge" id="currentUserBadge">User</span>
+            <h1 class="main-title"><span class="kyu-txt">D&E</span><span class="album-txt">Album & Card</span></h1>
+            <div class="sub-credits">Threads @sherrykao1314</div>
           </div>
-          <div class="stat-row-mini">
-            <span class="emoji-icon">🎵</span>
-            <div class="bar-bg"><div class="bar-fill fill-card" id="dhCardFill" style="width:0%"></div></div>
-            <span class="fraction" id="dhCardText">0/0</span>
-          </div>
-        </div>
-      </div>
-      
-      <div class="char-group">
-        <div class="char-title">赫</div>
-        <div class="char-stats">
-          <div class="stat-row-mini">
-            <span class="emoji-icon">💿</span>
-            <div class="bar-bg"><div class="bar-fill fill-album" id="ehAlbumFill" style="width:0%"></div></div>
-            <span class="fraction" id="ehAlbumText">0/0</span>
-          </div>
-          <div class="stat-row-mini">
-            <span class="emoji-icon">🎵</span>
-            <div class="bar-bg"><div class="bar-fill fill-card" id="ehCardFill" style="width:0%"></div></div>
-            <span class="fraction" id="ehCardText">0/0</span>
+          
+          <div class="total-stat-box">
+            <span class="stat-title">圖鑑總收錄</span>
+            <span class="stat-num" id="totalCountText">載入中...</span>
           </div>
         </div>
-      </div>
-      
-      <div class="char-group">
-        <div class="char-title">雙<br>人</div>
-        <div class="char-stats">
-          <div class="stat-row-mini">
-            <span class="emoji-icon">💿</span>
-            <div class="bar-bg"><div class="bar-fill fill-album" id="deAlbumFill" style="width:0%"></div></div>
-            <span class="fraction" id="deAlbumText">0/0</span>
-          </div>
-          <div class="stat-row-mini">
-            <span class="emoji-icon">🎵</span>
-            <div class="bar-bg"><div class="bar-fill fill-card" id="deCardFill" style="width:0%"></div></div>
-            <span class="fraction" id="deCardText">0/0</span>
+        
+        <div id="noticeBoard" class="notice-board"></div>
+        
+        <div class="filter-wrapper">
+          <div class="segmented-control">
+            <button class="seg-btn active" id="who-all" onclick="setWhoFilter('all')">ALL</button>
+            <button class="seg-btn" id="who-donghae" onclick="setWhoFilter('東海')">東海</button>
+            <button class="seg-btn" id="who-eunhyuk" onclick="setWhoFilter('銀赫')">銀赫</button>
+            <button class="seg-btn" id="who-couple" onclick="setWhoFilter('雙人')">雙人</button>
           </div>
         </div>
-      </div>
+      </header>
 
+      <div class="app-container">
+        <nav class="tab-nav">
+          <button class="tab-btn active" onclick="switchTab('wish', event)">❤ 想要</button>
+          <button class="tab-btn" onclick="switchTab('owned_tab', event)">✔ 擁有</button>
+          <button class="tab-btn" onclick="switchTab('solo', event)">Solo</button>
+          <button class="tab-btn" onclick="switchTab('dne', event)">D&E</button>
+          <button class="tab-btn" onclick="switchTab('group', event)">大隊專</button>
+          <button class="tab-btn" onclick="switchTab('other_album', event)">其他專</button>
+          <button class="tab-btn" onclick="switchTab('concert', event)">演唱會/FM/音樂活動</button> 
+          <button class="tab-btn" onclick="switchTab('endorsement', event)">代言/聯名</button>
+          <button class="tab-btn" onclick="switchTab('merch', event)">其他/周邊</button>
+          <button class="tab-btn" onclick="switchTab('calendar', event)">年曆</button>
+          <button class="tab-btn" onclick="switchTab('magazine', event)">雜誌</button>
+        </nav>
+        <div class="sub-nav-container" id="subNavContainer"><nav class="sub-nav" id="subNav"></nav></div>
+        <div class="content-area" id="displayArea"><div class="empty-msg">與 Google 連線中...</div></div>
+      </div>
+    </div>
+
+    <div class="bottom-bar">
+      <div class="triple-stat-container">
+        <div class="char-group">
+          <div class="char-title">海</div>
+          <div class="char-stats">
+            <div class="stat-row-mini"><span class="emoji-icon">💿</span><div class="bar-bg"><div class="bar-fill fill-album" id="dhAlbumFill" style="width:0%"></div></div><span class="fraction" id="dhAlbumText">0/0</span></div>
+            <div class="stat-row-mini"><span class="emoji-icon">🎵</span><div class="bar-bg"><div class="bar-fill fill-card" id="dhCardFill" style="width:0%"></div></div><span class="fraction" id="dhCardText">0/0</span></div>
+          </div>
+        </div>
+        <div class="char-group">
+          <div class="char-title">赫</div>
+          <div class="char-stats">
+            <div class="stat-row-mini"><span class="emoji-icon">💿</span><div class="bar-bg"><div class="bar-fill fill-album" id="ehAlbumFill" style="width:0%"></div></div><span class="fraction" id="ehAlbumText">0/0</span></div>
+            <div class="stat-row-mini"><span class="emoji-icon">🎵</span><div class="bar-bg"><div class="bar-fill fill-card" id="ehCardFill" style="width:0%"></div></div><span class="fraction" id="ehCardText">0/0</span></div>
+          </div>
+        </div>
+        <div class="char-group">
+          <div class="char-title">雙<br>人</div>
+          <div class="char-stats">
+            <div class="stat-row-mini"><span class="emoji-icon">💿</span><div class="bar-bg"><div class="bar-fill fill-album" id="deAlbumFill" style="width:0%"></div></div><span class="fraction" id="deAlbumText">0/0</span></div>
+            <div class="stat-row-mini"><span class="emoji-icon">🎵</span><div class="bar-bg"><div class="bar-fill fill-card" id="deCardFill" style="width:0%"></div></div><span class="fraction" id="deCardText">0/0</span></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
   <script>
+    // ==========================================
+    // ⚠️ 記得把下面的網址換成你最新發佈的 GAS URL！
+    // ==========================================
     const GAS_API_URL = "https://script.google.com/macros/s/AKfycby1K90k8xPausYiQSesrLYWw3Ozm2WPywTR0nshdji6XuTAInGRznZXGtP4lxLkfbHi/exec"; 
 
+    const TOKEN_KEY = 'dne_auth_token';
     const STORAGE_KEY = 'dne_github_pc_list';
     const WISH_KEY = 'dne_wish_list'; 
     
+    let userToken = localStorage.getItem(TOKEN_KEY);
+    let currentUsername = "";
     let myCollection = [];
     let myWishlist = [];
     let itemDictionary = {}; 
     let cardLookup = {}; 
-    
-    try {
-      myCollection = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-      myWishlist = JSON.parse(localStorage.getItem(WISH_KEY)) || [];
-    } catch(e) {}
-
-    let currentWhoFilter = 'all';
-    let currentRelease = null; // 用來記憶當前點選的子頁籤
-
-    function setWhoFilter(who) {
-      currentWhoFilter = who;
-      
-      document.querySelectorAll('.segmented-control .seg-btn').forEach(btn => btn.classList.remove('active'));
-      if(who === 'all') document.getElementById('who-all').classList.add('active');
-      if(who === '東海') document.getElementById('who-donghae').classList.add('active');
-      if(who === '銀赫') document.getElementById('who-eunhyuk').classList.add('active');
-      if(who === '雙人') document.getElementById('who-couple').classList.add('active');
-      
-      if(currentTab === 'wish') {
-        document.getElementById('displayArea').innerHTML = '';
-        renderWishlist();
-      } else if(currentTab === 'owned_tab') {
-        document.getElementById('displayArea').innerHTML = '';
-        renderOwnedlist();
-      } else {
-        // 沒有傳入 event 參數，代表是篩選器觸發，會試著保留 currentRelease
-        switchTab(currentTab);
-      }
-    }
-
-    function updateCounter() {
-      let totals = { dh: { alb: 0, crd: 0 }, eh: { alb: 0, crd: 0 }, de: { alb: 0, crd: 0 } };
-      let owneds = { dh: { alb: 0, crd: 0 }, eh: { alb: 0, crd: 0 }, de: { alb: 0, crd: 0 } };
-      
-      let overallAlbums = 0, overallCards = 0;
-
-      Object.keys(itemDictionary).forEach(id => {
-        let isAlbum = itemDictionary[id] === '專輯';
-        let isOwned = myCollection.includes(id);
-        let item = cardLookup[id];
-        
-        if (!item) return;
-
-        if (isAlbum) overallAlbums++; else overallCards++;
-        
-        let targetGrp = null;
-        if (item.who === '東海') targetGrp = 'dh';
-        else if (item.who === '銀赫') targetGrp = 'eh';
-        else if (item.who === '雙人') targetGrp = 'de';
-
-        if (targetGrp) {
-          if (isAlbum) {
-            totals[targetGrp].alb++;
-            if (isOwned) owneds[targetGrp].alb++;
-          } else {
-            totals[targetGrp].crd++;
-            if (isOwned) owneds[targetGrp].crd++;
-          }
-        }
-      });
-
-      document.getElementById('totalCountText').innerHTML = `${overallAlbums}專 / ${overallCards}卡`;
-
-      const renderBar = (grp, type) => {
-        let tot = totals[grp][type];
-        let own = owneds[grp][type];
-        let pct = tot === 0 ? 0 : Math.round((own / tot) * 100);
-        let NameKey = type === 'alb' ? 'Album' : 'Card';
-        document.getElementById(`${grp}${NameKey}Text`).innerText = `${own}/${tot}`;
-        document.getElementById(`${grp}${NameKey}Fill`).style.width = `${pct}%`;
-      };
-
-      renderBar('dh', 'alb'); renderBar('dh', 'crd');
-      renderBar('eh', 'alb'); renderBar('eh', 'crd');
-      renderBar('de', 'alb'); renderBar('de', 'crd');
-    }
-
     let allData = { solo: {}, dne: {}, group: {}, other_album: {}, concert: {}, merch: {}, calendar: {}, magazine: {}, endorsement: {} };
     let currentTab = 'wish'; 
+    let currentWhoFilter = 'all';
+    let currentRelease = null; 
+    let syncTimeout = null;
 
-    fetch(GAS_API_URL + "?t=" + new Date().getTime())
-      .then(response => response.json())
-      .then(result => {
-        if (result.message && result.message.toString().trim() !== "") {
-          const noticeEl = document.getElementById('noticeBoard');
-          noticeEl.innerHTML = `📢 ${result.message.toString().replace(/\n/g, '<br>')}`;
-          noticeEl.style.display = 'flex';
-        }
-        processData(result.cards);
-      })
-      .catch(error => {
-        document.getElementById('displayArea').innerHTML = '<div class="empty-msg">讀取資料失敗，請確認你的 GAS 網址是否正確。</div>';
-      });
+    // 啟動時檢查憑證
+    window.onload = function() {
+      if (userToken) {
+        verifyAndLoadData();
+      } else {
+        document.getElementById('loginMsg').innerText = "請輸入帳號密碼登入";
+      }
+    };
+
+    function verifyAndLoadData() {
+      document.getElementById('loginMsg').innerText = "自動登入中...";
+      fetch(`${GAS_API_URL}?action=verifyToken&token=${userToken}`)
+        .then(res => res.json())
+        .then(res => {
+          if (res.success) {
+            currentUsername = res.username;
+            document.getElementById('currentUserBadge').innerText = `ID: ${currentUsername}`;
+            loadUserCollection();
+          } else {
+            // Token 無效，要求重新登入
+            localStorage.removeItem(TOKEN_KEY);
+            userToken = null;
+            document.getElementById('loginMsg').innerText = "登入憑證失效，請重新登入";
+          }
+        })
+        .catch(e => {
+          document.getElementById('loginMsg').innerText = "連線失敗，請稍後再試";
+        });
+    }
+
+    function attemptLogin() {
+      const u = document.getElementById('usernameInput').value.trim();
+      const p = document.getElementById('passwordInput').value.trim();
+      if (!u || !p) {
+        document.getElementById('loginMsg').innerText = "帳號與密碼不能空白";
+        return;
+      }
+      
+      document.getElementById('loginMsg').innerText = "";
+      document.getElementById('loginLoader').style.display = "block";
+      document.querySelector('.login-btn').style.display = "none";
+
+      fetch(`${GAS_API_URL}?action=login&username=${u}&password=${p}`)
+        .then(res => res.json())
+        .then(res => {
+          if (res.success) {
+            userToken = res.token;
+            currentUsername = res.username;
+            localStorage.setItem(TOKEN_KEY, userToken);
+            document.getElementById('currentUserBadge').innerText = `ID: ${currentUsername}`;
+            loadUserCollection();
+          } else {
+            document.getElementById('loginMsg').innerText = res.message || "登入失敗";
+            resetLoginBtn();
+          }
+        })
+        .catch(e => {
+          document.getElementById('loginMsg').innerText = "網路錯誤，請稍後再試";
+          resetLoginBtn();
+        });
+    }
+
+    function resetLoginBtn() {
+      document.getElementById('loginLoader').style.display = "none";
+      document.querySelector('.login-btn').style.display = "block";
+    }
+
+    function loadUserCollection() {
+      document.getElementById('loginMsg').innerText = "讀取個人資料中...";
+      fetch(`${GAS_API_URL}?action=getUserData&token=${userToken}`)
+        .then(res => res.json())
+        .then(res => {
+          if (res.success) {
+            try {
+              myCollection = res.ownedData ? JSON.parse(res.ownedData) : [];
+              myWishlist = res.wishData ? JSON.parse(res.wishData) : [];
+            } catch(e) {
+              myCollection = []; myWishlist = [];
+            }
+            // 同步寫入 LocalStorage，讓本地操作也順暢
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(myCollection));
+            localStorage.setItem(WISH_KEY, JSON.stringify(myWishlist));
+            
+            // 隱藏登入頁面，顯示主程式，開始抓圖鑑資料
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            fetchCardsData();
+          } else {
+            document.getElementById('loginMsg').innerText = "讀取資料失敗，請重新登入";
+            resetLoginBtn();
+          }
+        })
+        .catch(e => {
+          document.getElementById('loginMsg').innerText = "資料讀取失敗，請重新登入";
+          resetLoginBtn();
+        });
+    }
+
+    // 將資料同步回 Google 試算表 (加入延遲避免頻繁寫入)
+    function syncDataToCloud() {
+      if(syncTimeout) clearTimeout(syncTimeout);
+      syncTimeout = setTimeout(() => {
+        fetch(GAS_API_URL, {
+          method: 'POST',
+          body: JSON.stringify({
+            action: 'syncData',
+            token: userToken,
+            ownedData: JSON.stringify(myCollection),
+            wishData: JSON.stringify(myWishlist)
+          })
+        }).catch(e => console.log("背景同步失敗"));
+      }, 1500); // 使用者點選後 1.5 秒再同步，避免連點造成系統負擔
+    }
+
+
+    // ----------------------------------------------------
+    // 下面是原本的主程式邏輯 (卡片渲染、篩選等)
+    // ----------------------------------------------------
+
+    function fetchCardsData() {
+      fetch(`${GAS_API_URL}?action=getCards&t=${new Date().getTime()}`)
+        .then(response => response.json())
+        .then(result => {
+          if (result.message && result.message.toString().trim() !== "") {
+            const noticeEl = document.getElementById('noticeBoard');
+            noticeEl.innerHTML = `📢 ${result.message.toString().replace(/\n/g, '<br>')}`;
+            noticeEl.style.display = 'flex';
+          }
+          processData(result.cards);
+        })
+        .catch(error => {
+          document.getElementById('displayArea').innerHTML = '<div class="empty-msg">讀取圖鑑資料失敗，請確認你的 GAS 網址是否正確。</div>';
+        });
+    }
 
     function processData(cards) {
       allData = { solo: {}, dne: {}, group: {}, other_album: {}, concert: {}, merch: {}, calendar: {}, magazine: {}, endorsement: {} };
       cardLookup = {};
+      itemDictionary = {};
 
       cards.forEach(card => {
         const [id, name, imgUrl, countryRaw, release, albumHeader, type, who] = card;
@@ -585,13 +675,75 @@
       updateCounter(); 
     }
 
+    function setWhoFilter(who) {
+      currentWhoFilter = who;
+      
+      document.querySelectorAll('.segmented-control .seg-btn').forEach(btn => btn.classList.remove('active'));
+      if(who === 'all') document.getElementById('who-all').classList.add('active');
+      if(who === '東海') document.getElementById('who-donghae').classList.add('active');
+      if(who === '銀赫') document.getElementById('who-eunhyuk').classList.add('active');
+      if(who === '雙人') document.getElementById('who-couple').classList.add('active');
+      
+      if(currentTab === 'wish') {
+        document.getElementById('displayArea').innerHTML = '';
+        renderWishlist();
+      } else if(currentTab === 'owned_tab') {
+        document.getElementById('displayArea').innerHTML = '';
+        renderOwnedlist();
+      } else {
+        switchTab(currentTab);
+      }
+    }
+
+    function updateCounter() {
+      let totals = { dh: { alb: 0, crd: 0 }, eh: { alb: 0, crd: 0 }, de: { alb: 0, crd: 0 } };
+      let owneds = { dh: { alb: 0, crd: 0 }, eh: { alb: 0, crd: 0 }, de: { alb: 0, crd: 0 } };
+      let overallAlbums = 0, overallCards = 0;
+
+      Object.keys(itemDictionary).forEach(id => {
+        let isAlbum = itemDictionary[id] === '專輯';
+        let isOwned = myCollection.includes(id);
+        let item = cardLookup[id];
+        
+        if (!item) return;
+
+        if (isAlbum) overallAlbums++; else overallCards++;
+        
+        let targetGrp = null;
+        if (item.who === '東海') targetGrp = 'dh';
+        else if (item.who === '銀赫') targetGrp = 'eh';
+        else if (item.who === '雙人') targetGrp = 'de';
+
+        if (targetGrp) {
+          if (isAlbum) {
+            totals[targetGrp].alb++;
+            if (isOwned) owneds[targetGrp].alb++;
+          } else {
+            totals[targetGrp].crd++;
+            if (isOwned) owneds[targetGrp].crd++;
+          }
+        }
+      });
+
+      document.getElementById('totalCountText').innerHTML = `${overallAlbums}專 / ${overallCards}卡`;
+
+      const renderBar = (grp, type) => {
+        let tot = totals[grp][type];
+        let own = owneds[grp][type];
+        let pct = tot === 0 ? 0 : Math.round((own / tot) * 100);
+        let NameKey = type === 'alb' ? 'Album' : 'Card';
+        document.getElementById(`${grp}${NameKey}Text`).innerText = `${own}/${tot}`;
+        document.getElementById(`${grp}${NameKey}Fill`).style.width = `${pct}%`;
+      };
+
+      renderBar('dh', 'alb'); renderBar('dh', 'crd');
+      renderBar('eh', 'alb'); renderBar('eh', 'crd');
+      renderBar('de', 'alb'); renderBar('de', 'crd');
+    }
+
     function switchTab(tabId, event) {
       currentTab = tabId;
-      
-      // 如果有傳入 event，代表是用戶「點擊了主選單」，此時才清除記憶的子頁籤
-      if (event) {
-        currentRelease = null;
-      }
+      if (event) { currentRelease = null; }
 
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       if(event && event.currentTarget) event.currentTarget.classList.add('active');
@@ -647,7 +799,6 @@
         return;
       }
       
-      // 判斷要顯示哪一個子頁籤：如果記憶的子頁籤還存在於篩選後的列表中，就繼續停留在該頁籤
       let activeRelease = releases[0];
       if (currentRelease && releases.includes(currentRelease)) {
         activeRelease = currentRelease;
@@ -666,11 +817,6 @@
 
     function renderWishlist() {
       const area = document.getElementById('displayArea');
-      if (myWishlist.length === 0) {
-        area.innerHTML = '<div class="empty-msg">清單空空的，快去點擊愛心標記想要的卡片吧！</div>';
-        return;
-      }
-      
       let filteredWishlist = myWishlist.filter(id => {
         if (!cardLookup[id]) return false;
         if (currentWhoFilter === 'all') return true;
@@ -690,11 +836,6 @@
 
     function renderOwnedlist() {
       const area = document.getElementById('displayArea');
-      if (myCollection.length === 0) {
-        area.innerHTML = '<div class="empty-msg">目前沒有已擁擁有的卡片喔，趕快去各分頁點擊收藏吧！</div>';
-        return;
-      }
-      
       let filteredOwned = myCollection.filter(id => {
         if (!cardLookup[id]) return false;
         if (currentWhoFilter === 'all') return true;
@@ -713,8 +854,7 @@
     }
 
     function switchRelease(release, event, country) {
-      currentRelease = release; // 記憶當前點選的子頁籤
-
+      currentRelease = release; 
       if(event) {
         document.querySelectorAll('.sub-nav .sub-btn').forEach(b => b.classList.remove('active'));
         event.currentTarget.classList.add('active');
@@ -799,7 +939,6 @@
       const isWish = myWishlist.includes(itemId);
       const isAlbum = item.type === '專輯';
       
-      // 判斷是誰並賦予專屬顏色 class
       let whoClass = '';
       if (item.who === '東海') whoClass = 'who-dh';
       else if (item.who === '銀赫') whoClass = 'who-eh';
@@ -831,6 +970,7 @@
           div.classList.add('in-wishlist');
         }
         localStorage.setItem(WISH_KEY, JSON.stringify(myWishlist));
+        syncDataToCloud(); // 觸發雲端同步
         if (currentTab === 'wish') renderWishlist(); 
       });
 
@@ -843,6 +983,7 @@
         }
         localStorage.setItem(STORAGE_KEY, JSON.stringify(myCollection));
         updateCounter();
+        syncDataToCloud(); // 觸發雲端同步
         if (currentTab === 'owned_tab') renderOwnedlist(); 
       });
 
