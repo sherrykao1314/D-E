@@ -54,7 +54,6 @@
     }
     .login-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--kyu-dark); margin-bottom: 5px; font-weight: 700;}
     
-    /* 已綁定的狀態標籤 */
     .bind-badge {
       display: none;
       background: #e8f5e9; color: #2e7d32;
@@ -228,6 +227,29 @@
     
     .loader { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid var(--kyu-dark); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 10px auto; display: none; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    /* ★ 抽獎跳出視窗樣式 */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.65); backdrop-filter: blur(6px);
+      z-index: 10000; display: none; align-items: center; justify-content: center;
+    }
+    .modal-content {
+      background: rgba(255, 255, 255, 0.95);
+      width: 90%; max-width: 380px; padding: 25px 20px;
+      border-radius: 24px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      position: relative;
+    }
+    .close-btn {
+      position: absolute; top: 12px; right: 16px; background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 0; line-height: 1;
+    }
+    .raffle-title { font-size: 1.4rem; font-weight: 800; color: var(--kyu-dark); margin-bottom: 15px; letter-spacing: 1px; }
+    .raffle-cards { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; }
+    .raffle-cards img { width: 30%; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); object-fit: cover; aspect-ratio: 5/7; }
+    .raffle-stats { font-size: 0.95rem; color: #444; margin-bottom: 15px; font-weight: 700; background: #e8f4fc; padding: 8px; border-radius: 12px; }
+    .raffle-btn { background: var(--kyu-heart); color: white; padding: 12px 24px; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; }
+    .raffle-btn:disabled { background: #999; cursor: not-allowed; opacity: 0.8; }
+    .raffle-btn:active:not(:disabled) { transform: scale(0.96); }
   </style>
 </head>
 <body>
@@ -243,6 +265,19 @@
       <button class="login-btn" onclick="attemptLogin()">登入</button>
       <div class="loader" id="loginLoader"></div>
       <div id="loginMsg"></div>
+    </div>
+  </div>
+
+  <!-- ★ 抽獎視窗 -->
+  <div class="modal-overlay" id="raffleModal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="document.getElementById('raffleModal').style.display='none'">×</button>
+      <div class="raffle-title">🎁 圖鑑開放小抽獎 🎁</div>
+      <div class="raffle-cards" id="raffleCardsContainer">
+        <!-- 卡片圖片會由JS動態塞入 -->
+      </div>
+      <div class="raffle-stats">目前總登記人次：<span id="raffleTotal" style="color: var(--kyu-heart); font-size: 1.1rem;">-</span> 人</div>
+      <button class="raffle-btn" id="raffleBtn" onclick="submitRaffle()">我要登記</button>
     </div>
   </div>
 
@@ -284,7 +319,6 @@
           <button class="tab-btn" onclick="switchTab('endorsement', event)">代言/聯名</button>
           <button class="tab-btn" onclick="switchTab('merch', event)">其他/周邊</button>
           <button class="tab-btn" onclick="switchTab('calendar', event)">年曆</button>
-          <!-- ★ 修改這裡的按鈕文字為 雜誌/寫真 -->
           <button class="tab-btn" onclick="switchTab('magazine', event)">雜誌/寫真</button>
         </nav>
         <div class="sub-nav-container" id="subNavContainer"><nav class="sub-nav" id="subNav"></nav></div>
@@ -360,7 +394,6 @@
     };
 
     function executeInitLoad(token) {
-      // 加入強制破解快取參數
       fetch(`${GAS_API_URL}?action=initLoad&token=${encodeURIComponent(token)}&t=${new Date().getTime()}`)
         .then(res => res.json())
         .then(res => {
@@ -386,7 +419,6 @@
       document.getElementById('loginLoader').style.display = "block";
       document.querySelector('.login-btn').style.display = "none";
 
-      // 加入編碼保護與破解快取參數
       fetch(`${GAS_API_URL}?action=loginComplete&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}&t=${new Date().getTime()}`)
         .then(res => res.json())
         .then(res => {
@@ -426,6 +458,88 @@
       document.getElementById('loginScreen').style.display = 'none';
       document.getElementById('mainApp').style.display = 'block';
       processData(res.cards);
+      
+      // ★ 登入成功後，檢查是否需要顯示抽獎視窗
+      checkAndShowRaffleModal();
+    }
+
+    // ★ 處理抽獎視窗顯示邏輯
+    function checkAndShowRaffleModal() {
+      // 設定截止時間為 2026年9月6日 晚上 23:59:59 (即 9/7 00:00 之前)
+      const deadline = new Date('2026-09-07T00:00:00+08:00'); 
+      if (new Date() >= deadline) return; // 超過時間就不執行，不顯示視窗
+
+      // 向後端請求抽獎資訊 (人數、今天是否已登記)
+      fetch(`${GAS_API_URL}?action=getRaffleInfo&username=${encodeURIComponent(currentUsername)}&t=${new Date().getTime()}`)
+        .then(res => res.json())
+        .then(res => {
+          if (res.success) {
+            // 填充卡片圖片 (1774, 1775, 1776)
+            const targetIds = ['1774', '1775', '1776'];
+            const container = document.getElementById('raffleCardsContainer');
+            container.innerHTML = ''; // 清空
+            targetIds.forEach(id => {
+              const card = cardLookup[id];
+              let imgUrl = (card && card.imgUrl) ? card.imgUrl : 'https://via.placeholder.com/150x210?text=尚未建立圖檔';
+              container.innerHTML += `<img src="${imgUrl}" alt="抽獎卡片">`;
+            });
+
+            // 更新人數
+            document.getElementById('raffleTotal').innerText = res.total;
+
+            // 更新按鈕狀態
+            const btn = document.getElementById('raffleBtn');
+            if (res.registeredToday) {
+              btn.innerText = '今天已登記過';
+              btn.disabled = true;
+            } else {
+              btn.innerText = '我要登記';
+              btn.disabled = false;
+            }
+
+            // 顯示視窗
+            document.getElementById('raffleModal').style.display = 'flex';
+          }
+        })
+        .catch(e => console.log("獲取抽獎資訊失敗"));
+    }
+
+    // ★ 送出抽獎登記
+    function submitRaffle() {
+      const btn = document.getElementById('raffleBtn');
+      btn.innerText = '登記中...';
+      btn.disabled = true;
+
+      fetch(GAS_API_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'registerRaffle',
+          token: userToken
+        })
+      })
+      .then(res => res.json())
+      .then(res => {
+        if (res.success) {
+          btn.innerText = '今天已登記過';
+          // 人數+1
+          const totalEl = document.getElementById('raffleTotal');
+          totalEl.innerText = parseInt(totalEl.innerText || 0) + 1;
+          alert("登記成功！祝你好運！");
+        } else {
+          alert(res.message || '登記失敗');
+          if(res.message === '今天已登記過囉！') {
+            btn.innerText = '今天已登記過';
+          } else {
+            btn.innerText = '我要登記';
+            btn.disabled = false;
+          }
+        }
+      })
+      .catch(e => {
+        alert("網路錯誤，請稍後再試");
+        btn.innerText = '我要登記';
+        btn.disabled = false;
+      });
     }
 
     function resetLoginUI(msg) {
@@ -494,7 +608,6 @@
           else if (c === '代言') { c = 'endorsement'; tabDisplayName = '代言/聯名'; }
           else if (c === '其他' || c === '周邊') { c = 'merch'; tabDisplayName = '其他/周邊'; }
           else if (c === '年曆') { c = 'calendar'; tabDisplayName = '年曆'; }
-          // ★ 修改這裡的判斷邏輯，同時支援原本的「雜誌」或是新寫的「雜誌/寫真」，並將顯示文字改為「雜誌/寫真」
           else if (c === '雜誌' || c === '雜誌/寫真') { c = 'magazine'; tabDisplayName = '雜誌/寫真'; }
           
           item.tab = tabDisplayName; 
