@@ -99,7 +99,6 @@
       box-sizing: border-box; 
     }
     
-    /* ★ 修改：縮小 header 內的間距以節省垂直空間 */
     header { 
       width: 100%; max-width: 800px; 
       margin: 0 auto 8px auto; 
@@ -117,10 +116,8 @@
     .album-txt { font-family: 'Montserrat', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; opacity: 0.95; line-height: 1; }
     .sub-credits { font-size: 0.7rem; color: #fff0f2; font-family: 'Montserrat', sans-serif; opacity: 0.9; font-weight: 500; text-shadow: 0 1px 3px rgba(0,0,0,0.4); letter-spacing: 0.5px; }
 
-    /* ★ 新增：用於將 ID標籤 與 收錄總數 包在一起靠右對齊的容器 */
     .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
 
-    /* ★ 修改：ID 標籤比例微調，並設為靠右 */
     .user-badge {
       background: rgba(13, 27, 42, 0.8); color: white;
       padding: 3px 8px; border-radius: 10px; font-size: 0.7rem;
@@ -128,18 +125,19 @@
       display: inline-block; line-height: 1.2;
     }
 
-    /* ★ 修改：收錄總數框的 padding 微縮 */
+    /* ★ 修改：圖鑑總收錄改為單行顯示 */
     .total-stat-box {
       background: rgba(255,255,255,0.7);
       border: 1px solid rgba(255,255,255,0.8);
-      border-radius: 12px;
+      border-radius: 10px;
       padding: 4px 8px;
       display: flex;
-      flex-direction: column;
-      align-items: flex-end;
+      flex-direction: row; /* ★ 改為左右排列 */
+      align-items: center; /* ★ 垂直置中 */
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      white-space: nowrap; /* ★ 防止換行 */
     }
-    .total-stat-box .stat-title { font-size: 9px; font-weight: 700; color: #666; margin-bottom: 2px; }
+    .total-stat-box .stat-title { font-size: 10px; font-weight: 700; color: #555; margin-bottom: 0; margin-right: 3px; }
     .total-stat-box .stat-num { font-size: 11px; font-weight: 800; color: var(--kyu-dark); letter-spacing: 0.5px;}
 
     .notice-board { padding: 8px 10px; background: rgba(255, 255, 255, 0.6); border-radius: 12px; font-size: 11px; color: var(--kyu-dark); font-weight: 600; border: 1px dashed rgba(13, 27, 42, 0.4); text-align: left; line-height: 1.4; margin: 0; box-sizing: border-box; word-break: break-word; display: none; align-items: center; }
@@ -321,7 +319,7 @@
           <div class="header-right">
             <span class="user-badge" id="currentUserBadge">User</span>
             <div class="total-stat-box">
-              <span class="stat-title">圖鑑總收錄</span>
+              <span class="stat-title">圖鑑總收錄：</span>
               <span class="stat-num" id="totalCountText">載入中...</span>
             </div>
           </div>
