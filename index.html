@@ -99,35 +99,41 @@
       box-sizing: border-box; 
     }
     
+    /* ★ 修改：縮小 header 內的間距以節省垂直空間 */
     header { 
       width: 100%; max-width: 800px; 
-      margin: 0 auto 12px auto; 
-      background: var(--glass); padding: 12px 16px; 
+      margin: 0 auto 8px auto; 
+      background: var(--glass); padding: 10px 14px; 
       border-radius: 18px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); 
       border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 8px 32px rgba(0, 40, 80, 0.15); 
       box-sizing: border-box; 
-      display: flex; flex-direction: column; gap: 12px;
+      display: flex; flex-direction: column; gap: 8px;
     }
     
     .header-top { display: flex; justify-content: space-between; align-items: center; }
-    .title-group { text-align: left; display: flex; flex-direction: column; gap: 4px; }
-    .main-title { font-family: 'Playfair Display', serif; color: var(--kyu-dark); margin: 0; display: flex; align-items: baseline; justify-content: flex-start; gap: 8px; flex-wrap: nowrap; text-shadow: 0 1px 3px rgba(255, 255, 255, 0.6); }
-    .kyu-txt { font-size: 2.2rem; font-style: italic; font-weight: 700; letter-spacing: 0.5px; line-height: 1; }
-    .album-txt { font-family: 'Montserrat', sans-serif; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; opacity: 0.95; line-height: 1; }
-    .sub-credits { font-size: 0.75rem; color: #fff0f2; font-family: 'Montserrat', sans-serif; opacity: 0.9; font-weight: 500; text-shadow: 0 1px 3px rgba(0,0,0,0.4); letter-spacing: 0.5px; }
+    .title-group { text-align: left; display: flex; flex-direction: column; gap: 2px; }
+    .main-title { font-family: 'Playfair Display', serif; color: var(--kyu-dark); margin: 0; display: flex; align-items: baseline; justify-content: flex-start; gap: 6px; flex-wrap: nowrap; text-shadow: 0 1px 3px rgba(255, 255, 255, 0.6); }
+    .kyu-txt { font-size: 2rem; font-style: italic; font-weight: 700; letter-spacing: 0.5px; line-height: 1; }
+    .album-txt { font-family: 'Montserrat', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; opacity: 0.95; line-height: 1; }
+    .sub-credits { font-size: 0.7rem; color: #fff0f2; font-family: 'Montserrat', sans-serif; opacity: 0.9; font-weight: 500; text-shadow: 0 1px 3px rgba(0,0,0,0.4); letter-spacing: 0.5px; }
 
+    /* ★ 新增：用於將 ID標籤 與 收錄總數 包在一起靠右對齊的容器 */
+    .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+
+    /* ★ 修改：ID 標籤比例微調，並設為靠右 */
     .user-badge {
       background: rgba(13, 27, 42, 0.8); color: white;
-      padding: 4px 10px; border-radius: 12px; font-size: 0.75rem;
-      font-weight: bold; margin-bottom: 5px; align-self: flex-start;
-      display: inline-block;
+      padding: 3px 8px; border-radius: 10px; font-size: 0.7rem;
+      font-weight: bold; margin: 0; align-self: flex-end;
+      display: inline-block; line-height: 1.2;
     }
 
+    /* ★ 修改：收錄總數框的 padding 微縮 */
     .total-stat-box {
       background: rgba(255,255,255,0.7);
       border: 1px solid rgba(255,255,255,0.8);
       border-radius: 12px;
-      padding: 6px 10px;
+      padding: 4px 8px;
       display: flex;
       flex-direction: column;
       align-items: flex-end;
@@ -274,7 +280,7 @@
     </div>
   </div>
 
-  <!-- ★ 抽獎視窗美化版 -->
+  <!-- 抽獎視窗美化版 -->
   <div class="modal-overlay" id="raffleModal">
     <div class="modal-content">
       <button class="close-btn" onclick="document.getElementById('raffleModal').style.display='none'">✕</button>
@@ -282,7 +288,6 @@
       <div class="raffle-header">
         <div class="raffle-title">🎉 歡慶終於完成D&E圖鑑！ 🎉</div>
         <div class="raffle-subtitle">🔥 抽出一位獨得這三張迷三小卡✨ 🔥</div>
-        <!-- ★ 更新了這裡，加入 Threads 公布抽獎結果的文字 -->
         <div class="raffle-desc">
           📅 活動日期：即日起～9/6 晚上12:00<br>
           💡 每人每天可以登記一次<br>
@@ -306,15 +311,19 @@
   <div id="mainApp">
     <div class="scroll-wrapper">
       <header>
+        <!-- ★ 修改：調整 Header 的排版結構 -->
         <div class="header-top">
           <div class="title-group">
-            <span class="user-badge" id="currentUserBadge">User</span>
             <h1 class="main-title"><span class="kyu-txt">D&E</span><span class="album-txt">Album & Card</span></h1>
             <div class="sub-credits">Threads @sherrykao1314</div>
           </div>
-          <div class="total-stat-box">
-            <span class="stat-title">圖鑑總收錄</span>
-            <span class="stat-num" id="totalCountText">載入中...</span>
+          <!-- ★ 將 ID 標籤移至這裡，並與總收錄放在同一個容器中 -->
+          <div class="header-right">
+            <span class="user-badge" id="currentUserBadge">User</span>
+            <div class="total-stat-box">
+              <span class="stat-title">圖鑑總收錄</span>
+              <span class="stat-num" id="totalCountText">載入中...</span>
+            </div>
           </div>
         </div>
         <div id="noticeBoard" class="notice-board"></div>
