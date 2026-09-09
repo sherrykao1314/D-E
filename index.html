@@ -7,7 +7,7 @@
   <link rel="apple-touch-icon" href="Kyu01.jpg?v=3">
   <link rel="icon" sizes="192x192" href="Kyu01.jpg?v=3">
   
-  <meta http-native-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   
@@ -125,17 +125,16 @@
       display: inline-block; line-height: 1.2;
     }
 
-    /* ★ 修改：圖鑑總收錄改為單行顯示 */
     .total-stat-box {
       background: rgba(255,255,255,0.7);
       border: 1px solid rgba(255,255,255,0.8);
       border-radius: 10px;
       padding: 4px 8px;
       display: flex;
-      flex-direction: row; /* ★ 改為左右排列 */
-      align-items: center; /* ★ 垂直置中 */
+      flex-direction: row; 
+      align-items: center; 
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      white-space: nowrap; /* ★ 防止換行 */
+      white-space: nowrap; 
     }
     .total-stat-box .stat-title { font-size: 10px; font-weight: 700; color: #555; margin-bottom: 0; margin-right: 3px; }
     .total-stat-box .stat-num { font-size: 11px; font-weight: 800; color: var(--kyu-dark); letter-spacing: 0.5px;}
@@ -232,34 +231,6 @@
     .loader { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid var(--kyu-dark); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 10px auto; display: none; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-    /* ★ 抽獎跳出視窗樣式美化 */
-    .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(13, 27, 42, 0.7); backdrop-filter: blur(8px);
-      z-index: 10000; display: none; align-items: center; justify-content: center;
-    }
-    .modal-content {
-      background: linear-gradient(145deg, #ffffff, #f0f4f8);
-      width: 90%; max-width: 380px; padding: 25px 20px;
-      border-radius: 24px; text-align: center; box-shadow: 0 15px 50px rgba(0,0,0,0.4);
-      position: relative; border: 2px solid rgba(255,255,255,0.8);
-    }
-    .close-btn {
-      position: absolute; top: 12px; right: 16px; background: rgba(0,0,0,0.05); border: none; font-size: 20px; cursor: pointer; color: #555; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s;
-    }
-    .close-btn:active { background: rgba(0,0,0,0.15); transform: scale(0.9); }
-    .raffle-header { margin-bottom: 12px; }
-    .raffle-title { font-size: 1.25rem; font-weight: 800; color: var(--kyu-dark); margin-bottom: 8px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); line-height: 1.3; }
-    .raffle-subtitle { font-size: 0.9rem; font-weight: 700; color: #e63946; background: #ffe3e3; padding: 5px 12px; border-radius: 20px; display: inline-block; box-shadow: 0 2px 6px rgba(230,57,70,0.2); letter-spacing: 0.5px; margin-bottom: 10px; }
-    .raffle-desc { font-size: 0.85rem; color: #555; font-weight: 600; line-height: 1.6; background: rgba(0,0,0,0.03); padding: 8px; border-radius: 12px; margin: 0 5px 5px 5px; text-align: center; }
-    
-    .raffle-cards { display: flex; justify-content: center; gap: 12px; margin-bottom: 15px; }
-    .raffle-cards img { width: 28%; border-radius: 10px; box-shadow: 0 6px 15px rgba(0,0,0,0.2); object-fit: cover; aspect-ratio: 5/7; border: 2px solid white; }
-    
-    .raffle-stats { font-size: 1rem; color: #333; margin-bottom: 15px; font-weight: 700; background: rgba(255,255,255,0.7); padding: 8px; border-radius: 12px; border: 1px dashed #ccc; }
-    .raffle-btn { background: linear-gradient(135deg, var(--kyu-heart), #003366); color: white; padding: 14px 24px; border: none; border-radius: 16px; font-size: 1.15rem; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; box-shadow: 0 4px 15px rgba(0, 85, 164, 0.4); }
-    .raffle-btn:disabled { background: #999; box-shadow: none; cursor: not-allowed; opacity: 0.8; }
-    .raffle-btn:active:not(:disabled) { transform: scale(0.96); box-shadow: 0 2px 8px rgba(0, 85, 164, 0.4); }
   </style>
 </head>
 <body>
@@ -278,44 +249,15 @@
     </div>
   </div>
 
-  <!-- 抽獎視窗美化版 -->
-  <div class="modal-overlay" id="raffleModal">
-    <div class="modal-content">
-      <button class="close-btn" onclick="document.getElementById('raffleModal').style.display='none'">✕</button>
-      
-      <div class="raffle-header">
-        <div class="raffle-title">🎉 歡慶終於完成D&E圖鑑！ 🎉</div>
-        <div class="raffle-subtitle">🔥 抽出一位獨得這三張迷三小卡✨ 🔥</div>
-        <div class="raffle-desc">
-          📅 活動日期：即日起～9/6 晚上12:00<br>
-          💡 每人每天可以登記一次<br>
-          📢 活動結束後在 Threads 公布抽獎結果
-        </div>
-      </div>
-      
-      <div class="raffle-cards" id="raffleCardsContainer">
-        <!-- 網址已固定在這 -->
-        <img src="https://drive.google.com/thumbnail?id=12EsA0b3pcULwnNK35NbdqA2t8r4_Vv0R&sz=w800" alt="抽獎卡片1">
-        <img src="https://drive.google.com/thumbnail?id=1NLcHxjBA45Rx43p4U5MTQVlSt2er-Of3&sz=w800" alt="抽獎卡片2">
-        <img src="https://drive.google.com/thumbnail?id=1E9pBlDWlQttU7uPQoy87F5W5kS-w_H0d&sz=w800" alt="抽獎卡片3">
-      </div>
-      
-      <div class="raffle-stats">目前總登記人次：<span id="raffleTotal" style="color: var(--kyu-heart); font-size: 1.2rem;">-</span> 人</div>
-      <button class="raffle-btn" id="raffleBtn" onclick="submitRaffle()">我要登記</button>
-    </div>
-  </div>
-
   <!-- 主程式區塊 -->
   <div id="mainApp">
     <div class="scroll-wrapper">
       <header>
-        <!-- ★ 修改：調整 Header 的排版結構 -->
         <div class="header-top">
           <div class="title-group">
             <h1 class="main-title"><span class="kyu-txt">D&E</span><span class="album-txt">Album & Card</span></h1>
             <div class="sub-credits">Threads @sherrykao1314</div>
           </div>
-          <!-- ★ 將 ID 標籤移至這裡，並與總收錄放在同一個容器中 -->
           <div class="header-right">
             <span class="user-badge" id="currentUserBadge">User</span>
             <div class="total-stat-box">
@@ -400,6 +342,10 @@
     let currentWhoFilter = 'all';
     let currentRelease = null; 
     let syncTimeout = null;
+
+    // 新增：紀錄想要與擁有清單的類別過濾狀態
+    let currentWishFilter = 'all';
+    let currentOwnedFilter = 'all';
 
     window.onload = function() {
       if (userToken) {
@@ -486,75 +432,6 @@
       document.getElementById('loginScreen').style.display = 'none';
       document.getElementById('mainApp').style.display = 'block';
       processData(res.cards);
-      
-      checkAndShowRaffleModal();
-    }
-
-    // ★ 處理抽獎視窗顯示邏輯
-    function checkAndShowRaffleModal() {
-      // 設定截止時間為 2026年9月6日 晚上 23:59:59 (即 9/7 00:00 之前)
-      const deadline = new Date('2026-09-07T00:00:00+08:00'); 
-      if (new Date() >= deadline) return; // 超過時間就不執行，不顯示視窗
-
-      fetch(`${GAS_API_URL}?action=getRaffleInfo&username=${encodeURIComponent(currentUsername)}&t=${new Date().getTime()}`)
-        .then(res => res.json())
-        .then(res => {
-          if (res.success) {
-            // 更新人數
-            document.getElementById('raffleTotal').innerText = res.total;
-
-            // 更新按鈕狀態
-            const btn = document.getElementById('raffleBtn');
-            if (res.registeredToday) {
-              btn.innerText = '今天已登記過';
-              btn.disabled = true;
-            } else {
-              btn.innerText = '我要登記';
-              btn.disabled = false;
-            }
-
-            // 顯示視窗
-            document.getElementById('raffleModal').style.display = 'flex';
-          }
-        })
-        .catch(e => console.log("獲取抽獎資訊失敗"));
-    }
-
-    // ★ 送出抽獎登記
-    function submitRaffle() {
-      const btn = document.getElementById('raffleBtn');
-      btn.innerText = '登記中...';
-      btn.disabled = true;
-
-      fetch(GAS_API_URL, {
-        method: 'POST',
-        body: JSON.stringify({
-          action: 'registerRaffle',
-          token: userToken
-        })
-      })
-      .then(res => res.json())
-      .then(res => {
-        if (res.success) {
-          btn.innerText = '今天已登記過';
-          const totalEl = document.getElementById('raffleTotal');
-          totalEl.innerText = parseInt(totalEl.innerText || 0) + 1;
-          alert("登記成功！祝你好運！");
-        } else {
-          alert(res.message || '登記失敗');
-          if(res.message === '今天已登記過囉！') {
-            btn.innerText = '今天已登記過';
-          } else {
-            btn.innerText = '我要登記';
-            btn.disabled = false;
-          }
-        }
-      })
-      .catch(e => {
-        alert("網路錯誤，請稍後再試");
-        btn.innerText = '我要登記';
-        btn.disabled = false;
-      });
     }
 
     function resetLoginUI(msg) {
@@ -716,6 +593,39 @@
       renderBar('de', 'alb'); renderBar('de', 'crd');
     }
 
+    // 新增：渲染個人清單的子選單
+    function renderPersonalSubNav(type) {
+      const subNav = document.getElementById('subNav');
+      subNav.innerHTML = '';
+      
+      const filters = [
+        { id: 'all', label: '全部' },
+        { id: 'album', label: '💿 專輯' },
+        { id: 'card', label: '🎵 小卡' }
+      ];
+      
+      const currentFilter = type === 'wish' ? currentWishFilter : currentOwnedFilter;
+
+      filters.forEach((f) => {
+        const btn = document.createElement('button');
+        btn.className = `sub-btn ${f.id === currentFilter ? 'active' : ''}`;
+        btn.innerText = f.label;
+        btn.onclick = (e) => {
+          document.querySelectorAll('#subNav .sub-btn').forEach(b => b.classList.remove('active'));
+          e.currentTarget.classList.add('active');
+          if (type === 'wish') {
+            currentWishFilter = f.id;
+            renderWishlist();
+          }
+          if (type === 'owned') {
+            currentOwnedFilter = f.id;
+            renderOwnedlist();
+          }
+        };
+        subNav.appendChild(btn);
+      });
+    }
+
     function switchTab(tabId, event) {
       currentTab = tabId;
       if (event) { currentRelease = null; }
@@ -734,13 +644,15 @@
 
       if (tabId === 'wish') {
         area.classList.add('wish-view');
-        subNavContainer.style.display = 'none'; 
+        subNavContainer.style.display = 'block'; 
+        renderPersonalSubNav('wish');
         renderWishlist();
         return;
       }
       if (tabId === 'owned_tab') {
         area.classList.add('owned-view');
-        subNavContainer.style.display = 'none'; 
+        subNavContainer.style.display = 'block'; 
+        renderPersonalSubNav('owned');
         renderOwnedlist();
         return;
       }
@@ -782,18 +694,31 @@
 
     function renderWishlist() {
       const area = document.getElementById('displayArea');
+      area.innerHTML = ''; // 清空原本內容
+
       let filteredWishlist = myWishlist.filter(id => {
         if (!cardLookup[id]) return false;
-        if (currentWhoFilter === 'all') return true;
-        return cardLookup[id].who === currentWhoFilter;
+        
+        // 人物過濾器
+        if (currentWhoFilter !== 'all' && cardLookup[id].who !== currentWhoFilter) return false;
+        
+        // 新增的類別過濾器
+        if (currentWishFilter === 'album') return itemDictionary[id] === '專輯';
+        if (currentWishFilter === 'card') return itemDictionary[id] !== '專輯';
+        
+        return true;
       });
 
       if (filteredWishlist.length === 0) {
-        area.innerHTML = '<div class="empty-msg">目前人物篩選下，沒有你想收藏的卡片喔！</div>';
+        area.innerHTML = '<div class="empty-msg">目前篩選條件下，沒有你想收藏的卡片喔！</div>';
         return;
       }
 
-      area.insertAdjacentHTML('beforeend', `<div class="section-title">❤ 我的想要清單 (${filteredWishlist.length})</div>`);
+      let titleText = "❤ 我的想要清單";
+      if (currentWishFilter === 'album') titleText = "💿 想要的專輯";
+      if (currentWishFilter === 'card') titleText = "🎵 想要的小卡";
+
+      area.insertAdjacentHTML('beforeend', `<div class="section-title">${titleText} (${filteredWishlist.length})</div>`);
       const g = document.createElement('div'); g.className = 'grid';
       filteredWishlist.forEach(id => { g.appendChild(createCard(cardLookup[id])); });
       area.appendChild(g);
@@ -801,18 +726,31 @@
 
     function renderOwnedlist() {
       const area = document.getElementById('displayArea');
+      area.innerHTML = ''; // 清空原本內容
+
       let filteredOwned = myCollection.filter(id => {
         if (!cardLookup[id]) return false;
-        if (currentWhoFilter === 'all') return true;
-        return cardLookup[id].who === currentWhoFilter;
+        
+        // 人物過濾器
+        if (currentWhoFilter !== 'all' && cardLookup[id].who !== currentWhoFilter) return false;
+        
+        // 新增的類別過濾器
+        if (currentOwnedFilter === 'album') return itemDictionary[id] === '專輯';
+        if (currentOwnedFilter === 'card') return itemDictionary[id] !== '專輯';
+        
+        return true;
       });
 
       if (filteredOwned.length === 0) {
-        area.innerHTML = '<div class="empty-msg">目前人物篩選下，沒有你已收藏的卡片喔！</div>';
+        area.innerHTML = '<div class="empty-msg">目前篩選條件下，沒有你已收藏的卡片喔！</div>';
         return;
       }
 
-      area.insertAdjacentHTML('beforeend', `<div class="section-title">✔ 我已擁有清單 (${filteredOwned.length})</div>`);
+      let titleText = "✔ 我已擁有清單";
+      if (currentOwnedFilter === 'album') titleText = "💿 擁有的專輯";
+      if (currentOwnedFilter === 'card') titleText = "🎵 擁有的小卡";
+
+      area.insertAdjacentHTML('beforeend', `<div class="section-title">${titleText} (${filteredOwned.length})</div>`);
       const g = document.createElement('div'); g.className = 'grid';
       filteredOwned.forEach(id => { g.appendChild(createCard(cardLookup[id])); });
       area.appendChild(g);
